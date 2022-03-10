@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UsuarioRepositoryTest {
 //
+//	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
