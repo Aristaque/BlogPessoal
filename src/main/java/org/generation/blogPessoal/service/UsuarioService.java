@@ -12,17 +12,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 //
 //
 @Service
 public class UsuarioService {
 
 	@Autowired
-	private UsuarioRepository repository;
+	private UsuarioRepository usuarioRepository;
+
+	public Optional<Usuario> atualizarUsuario(Usuario usuario) {
+		if (usuarioRepository.findById(usuario.getId()).isPresent()) {
+			Optional<Usuario> buscaUsuario = usuarioRepository.findByUsuario(usuario.getUsuario());
+
+			if (buscaUsuario.isPresent()) {
+				if (buscaUsuario.get().getId() != usuario.getId())
+					throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe.", null);
+			}
+
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+			return Optional.of(usuarioRepository.save(usuario));
+		}
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado.", null);
+	}
 
 	public Optional<Usuario> CadastrarUsuario(Usuario usuario) {
 
-		Optional<Usuario> usuarioM = repository.findByUsuario(usuario.getUsuario());
+		Optional<Usuario> usuarioM = usuarioRepository.findByUsuario(usuario.getUsuario());
 
 		if (usuarioM.isPresent()) {
 
@@ -35,14 +51,13 @@ public class UsuarioService {
 			String passwordEncoder = encoder.encode(usuario.getSenha());
 			usuario.setSenha(passwordEncoder);
 
-			return Optional.ofNullable(repository.save(usuario));
+			return Optional.ofNullable(usuarioRepository.save(usuario));
 		}
-
 	}
 
 	public Optional<UserLogin> Logar(Optional<UserLogin> user) {
 		BCryptPasswordEncoder enconder = new BCryptPasswordEncoder();
-		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario(user.get().getUsuario());
 
 		if (usuario.isPresent()) {
 			if (enconder.matches(user.get().getSenha(), usuario.get().getSenha())) {
@@ -55,11 +70,15 @@ public class UsuarioService {
 				user.get().setNome(usuario.get().getNome());
 
 				return user;
-
 			}
 		}
 		return null;
+	}
 
+	private String criptografarSenha(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String senhaEncoder = encoder.encode(senha);
+		return senhaEncoder;
 	}
 
 }
