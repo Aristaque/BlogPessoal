@@ -28,13 +28,13 @@ public class UsuarioRepositoryTest {
 		
 		usuarioRepository.deleteAll();
 		
-		usuarioRepository.save(new Usuario(0L,"Jeferson Aristaque", "Aristaque","5432213"));
+		usuarioRepository.save(new Usuario(0L,"Jeferson Aristaque", "FOTO", "Aristaque","5432213"));
 		
-		usuarioRepository.save(new Usuario(0L,"Fernando Aristaque", "Juninho","1323443"));
+		usuarioRepository.save(new Usuario(0L,"Fernando Aristaque", "FOTO", "Juninho","1323443"));
 		
-		usuarioRepository.save(new Usuario(0L,"Giovana Aristaque", "Penelope","12331234"));
+		usuarioRepository.save(new Usuario(0L,"Giovana Aristaque", "FOTO", "Penelope","12331234"));
 		
-		usuarioRepository.save(new Usuario(0L,"Tamara Rodrigues", "Tamarex","1323443"));
+		usuarioRepository.save(new Usuario(0L,"Tamara Rodrigues", "FOTO", "Tamarex","1323443"));
 				
 	}
 	@Test
