@@ -20,7 +20,7 @@ public class SwaggerConfig {
         return new OpenAPI()
 			.info(new Info()
 				.title("Projeto Blog Pessoal")
-				.description("Projeto para postagens de diversos temas")
+				.description("Projeto para postagem de diversos assuntos")
 				.version("0.0.1")
 			.contact(new Contact()
 				.name("Github Jeferson Aristaque")
