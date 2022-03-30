@@ -49,7 +49,7 @@ public class UsuarioControllerTest {
 	@DisplayName("Cadastrar um usuário")
 	public void deveCriarUmUsuario() {
 		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(
-				new Usuario(0L, "Joao Rodrigres", "FOTO","Rodrigues", "542342"));
+				new Usuario(0L, "Joao Rodrigres", "FOTO","rodrigues@email.com", "542342678"));
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao,
 				Usuario.class);
 
@@ -63,10 +63,10 @@ public class UsuarioControllerTest {
 	@Order(2)
 	@DisplayName("Não deve permitir duplicação de usuário")
 	public void naoDeveDuplicarUsuario() {
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Jenifer Aristaque", "FOTO", "Aristaquinha", "82888821"));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Jenifer Aristaque", "FOTO", "jenifer@email.com", "82888821"));
 		
 		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(
-				new Usuario(0L, "Jenifer Aristaque", "FOTO", "Aristaquinha", "82888821"));
+				new Usuario(0L, "Jenifer Aristaque", "FOTO", "jenifer@email.com", "82888821"));
 
 		ResponseEntity<Usuario> resposta = testRestTemplate.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao,
 				Usuario.class);
@@ -78,9 +78,9 @@ public class UsuarioControllerTest {
 	@DisplayName("Alterar um usuário")
 	public void deveAtualizarUmUsuario() {
 		Optional<Usuario> atualizarUsuario = usuarioService
-				.cadastrarUsuario(new Usuario(0L, "Tamara Rodrigues", "FOTO", "Tamarex", "1323443"));
+				.cadastrarUsuario(new Usuario(0L, "Tamara Rodrigues", "FOTO", "tamara@email.com", "132344377"));
 		
-		Usuario usuarioUpdate = new Usuario(atualizarUsuario.get().getId(), "Tamara Rodrigues", "FOTO", "RodriguesTamara", "1323443");
+		Usuario usuarioUpdate = new Usuario(atualizarUsuario.get().getId(), "Tamara Rodrigues", "FOTO", "tamara@email.com", "132344377");
 
 		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(usuarioUpdate);
 
@@ -97,11 +97,11 @@ public class UsuarioControllerTest {
 	@Order(4)
 	@DisplayName("Listar todos os usuários")
 	public void deveMostrarTodasPostagens() {
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Jeferson Aristaque", "FOTO", "Aristaque", "5432213"));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Jeferson Aristaque", "FOTO", "jeferson@email.com", "5432213"));
 
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Fernando Aristaque", "FOTO", "Juninho", "1323443"));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Fernando Aristaque", "FOTO", "junhinho@email.com", "1323443"));
 
-		ResponseEntity<String> resposta = testRestTemplate.withBasicAuth("Aristaque", "5432213").exchange("/usuarios/all",
+		ResponseEntity<String> resposta = testRestTemplate.withBasicAuth("jeferson@email.com", "5432213").exchange("/usuarios/all",
 				HttpMethod.GET, null, String.class);
 
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
